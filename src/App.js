@@ -6,6 +6,7 @@ import Products from './components/products/Products';
 import ShoppingCar from './components/products/ShoppingCar';
 
 import AlertaState from './context/alerts/alertState';
+import AuthState from './context/authentication/authState';
 
 
 function App() {
@@ -26,14 +27,16 @@ function App() {
 
   return (
     <AlertaState>
-      <Router>
-        <Switch>
-            <Route exact path="/" component={Products} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/register" component={Register} />          
-            <Route exact path="/shoppingcar" component={ShoppingCar} />
-        </Switch>
-      </Router>
+      <AuthState>
+        <Router>
+          <Switch>
+              <Route exact path="/" component={Products} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />          
+              <Route exact path="/shoppingcar" component={ShoppingCar} />
+          </Switch>
+        </Router>
+      </AuthState>
     </AlertaState>
   );
 }

@@ -1,18 +1,37 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import AlertContext from '../../context/alerts/alertContext';
+import AuthContext from '../../context/authentication/authContext';
 
-const Register = () => {
+const Register = (props) => {
+
+  const alertContext = useContext(AlertContext);
+  const { alert, showAlert } = alertContext;
+
+  const authContext = useContext(AuthContext);
+  const { message, authenticated, registerUser } = authContext;
+
+  useEffect(() => {
+    if (authenticated) {
+      props.history.push('/');
+    } 
+    
+    if (message) {
+      showAlert(message.msg, message.category);
+    }
+  }, [message, authenticated, props.history]);
 
   // State to login
   const [user, setUser] = useState({
     name: '',
+    lastName: '',
     email: '',
     password: '',
     confirm: ''
   });
 
   // extract user info
-  const { name, email, password, confirm } = user;
+  const { name, lastName, email, password, confirm } = user;
 
   const onChange = (event) => {
     setUser({
@@ -25,31 +44,42 @@ const Register = () => {
     e.preventDefault();
 
     // Validate empty inputs
-    if( name.trim() === '' || 
+    if( name.trim() === '' ||
+        lastName.trim() === '' || 
         email.trim() === '' || 
         password.trim() === '' || 
         confirm.trim() === '' ) {
-      console.log("Campos requeridos");
+      showAlert('Todos los campos son obligatorios', 'alerta-error');
       return;
     }
 
     // Password must be at least 6 characters
     if(password.length < 6) {
-      console.log("Password mayor de 6 digitos");
+      showAlert('El password debe ser mayor de 6 caracteres', 'alerta-error');
       return;
     }
 
     //Two passwords are equals
     if(password !== confirm) {
-      console.log("Passwords diferentes");
+      showAlert('Los passwords son diferentes', 'alerta-error');
       return;
     }
+
+    registerUser({
+      name,
+      lastName,
+      email,
+      password
+    });
   }
 
   return (
     <div className="form-usuario">
+      {alert ? (
+        <div className={`alerta ${alert.category}`}>{alert.message}</div>
+      ) : null}
       <div className="contenedor-form sombra-dark">
-        <h1>Obtener una cuenta</h1>
+        <h1>Registrar una cuenta</h1>
 
         <form onSubmit={onSubmit}>
           <div className="campo-form">
@@ -60,6 +90,18 @@ const Register = () => {
               name="name"
               placeholder="Nombre"
               value={name}
+              onChange={onChange}
+            />
+          </div>
+
+          <div className="campo-form">
+            <label htmlFor="lastName">Apellidos</label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              placeholder="Apellidos"
+              value={lastName}
               onChange={onChange}
             />
           </div>
@@ -89,11 +131,11 @@ const Register = () => {
           </div>
 
           <div className="campo-form">
-            <label htmlFor="confirmar">Confirmar Password</label>
+            <label htmlFor="confirm">Confirmar Password</label>
             <input
               type="password"
-              id="confirmar"
-              name="confirmar"
+              id="confirm"
+              name="confirm"
               placeholder="Repite tu Password"
               value={confirm}
               onChange={onChange}

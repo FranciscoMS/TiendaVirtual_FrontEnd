@@ -1,20 +1,20 @@
 import React, { useReducer } from 'react';
-import alertReducer from './alertReduce';
-import alertContext from './alertContext';
-import {MOSTRAR_ALERTA, OCULTAR_ALERTA} from '../../types';
+import AlertReducer from './alertReducer';
+import AlertContext from './alertContext';
+import {SHOW_ALERT, HIDE_ALERT} from '../../types';
 
 const AlertState = (props) => {
 
   const initialState = {
-    alerta: null
+    alert: null
   }
 
-  const [ state, dispatch ] = useReducer(alertReducer, initialState);
+  const [ state, dispatch ] = useReducer(AlertReducer, initialState);
 
   //Functions
   const showAlert = (message, category) => {
     dispatch({
-      type: MOSTRAR_ALERTA,
+      type: SHOW_ALERT,
       payload: {
         message,
         category
@@ -23,20 +23,20 @@ const AlertState = (props) => {
 
     setTimeout(() => {
       dispatch({
-        type: OCULTAR_ALERTA
+        type: HIDE_ALERT
       });
     }, 5000);
   }
 
   return (
-    <alertContext.Provider
+    <AlertContext.Provider
       value={{
-        alerta: state.alerta,
+        alert: state.alert,
         showAlert
       }}
     >
       {props.children}
-    </alertContext.Provider>
+    </AlertContext.Provider>
   );
 }
 
