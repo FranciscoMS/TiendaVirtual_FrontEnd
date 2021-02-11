@@ -1,7 +1,11 @@
 import React, {useState} from 'react';
-import Login from './components/Login';
-import Product from './components/Product';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+import Products from './components/products/Products';
+import ShoppingCar from './components/products/ShoppingCar';
 
+import AlertaState from './context/alerts/alertState';
 
 
 function App() {
@@ -18,19 +22,19 @@ function App() {
     qtyInventary: 15
   }]);
 
-  const [goLogin, setGoLogin] = useState(false);
+  const [goLogin, setGoLogin] = useState(true);
 
   return (
-    <div>
-      <h1>Tienda Virtual</h1>
-      <div>
-        {goLogin ? (
-          <Login />
-        ) : (
-          products.map((product) => <Product product={product} />)
-        )}
-      </div>
-    </div>
+    <AlertaState>
+      <Router>
+        <Switch>
+            <Route exact path="/" component={Products} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />          
+            <Route exact path="/shoppingcar" component={ShoppingCar} />
+        </Switch>
+      </Router>
+    </AlertaState>
   );
 }
 
