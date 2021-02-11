@@ -7,6 +7,14 @@ import ShoppingCar from './components/products/ShoppingCar';
 
 import AlertaState from './context/alerts/alertState';
 import AuthState from './context/authentication/authState';
+import tokenAuth from './config/tokenAuth';
+import PrivateRoute from './components/routes/PrivateRoute';
+
+//Check if token exist
+const token = localStorage.getItem('token');
+if (token) {
+  tokenAuth(token);
+}
 
 
 function App() {
@@ -33,7 +41,7 @@ function App() {
               <Route exact path="/" component={Products} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />          
-              <Route exact path="/shoppingcar" component={ShoppingCar} />
+              <PrivateRoute exact path="/shoppingcar" component={ShoppingCar} />
           </Switch>
         </Router>
       </AuthState>

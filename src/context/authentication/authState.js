@@ -18,7 +18,8 @@ const AuthState = (props) => {
     token: localStorage.getItem('token'),
     authenticated: null,
     user: null,
-    message: null
+    message: null,
+    loading: true
   };
 
   const [state, dispatch] = useReducer(AuthReducer, initialState);
@@ -32,6 +33,7 @@ const AuthState = (props) => {
         payload: response.data
       });
 
+      //Get authenticated user
       authUser();
     } catch (error) {
       
@@ -47,19 +49,57 @@ const AuthState = (props) => {
     }
   }
 
+  //Get user after register
   const authUser = async () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       tokenAuth(token);
     }
 
     try {
-      const response = await clientAxios.get('/api/auth');
+      const response = await clientAxios.get("/api/auth");
+
+      dispatch({
+        type: GET_USER,
+        payload: response.data.user,
+      });
     } catch (error) {
       dispatch({
         type: LOGIN_ERROR
       });
     }
+  }
+
+  //Login into the app
+  const login = async data => {
+    try {
+      const response = await clientAxios.post('/api/auth', data);
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: response.data
+      });
+
+      //Get authenticated user
+      authUser();
+    } catch (error) {
+
+      const alert = {
+        msg: error.response.data.msg,
+        category: 'alerta-error'
+      }
+
+      dispatch({
+        type: LOGIN_ERROR,
+        payload: alert
+      });
+      
+    }
+  }
+
+  const logout = () => {
+    dispatch({
+      type: LOGOUT,
+    });
   }
 
   return (
@@ -69,7 +109,11 @@ const AuthState = (props) => {
         authenticated: state.authenticated,
         user: state.user,
         message: state.message,
-        registerUser
+        loading: state.loading,
+        registerUser,
+        login,
+        authUser,
+        logout
       }}
     >
       {props.children}
