@@ -52,9 +52,8 @@ const AuthState = (props) => {
   //Get user after register
   const authUser = async () => {
     const token = localStorage.getItem("token");
-    if (token) {
-      tokenAuth(token);
-    }
+    
+    tokenAuth(token);
 
     try {
       const response = await clientAxios.get("/api/auth");
@@ -97,6 +96,9 @@ const AuthState = (props) => {
   }
 
   const logout = () => {
+    //Delete token from header
+    tokenAuth(null);
+
     dispatch({
       type: LOGOUT,
     });

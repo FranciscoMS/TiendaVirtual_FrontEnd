@@ -2,8 +2,9 @@ export const GET_PRODUCTS = 'GET_PRODUCTS';
 
 export const ADD_SHOPPING = 'ADD_SHOPPING';
 export const UPDATE_SHOPPING = 'UPDATE_SHOPPING';
-export const GET_SHOPPING = 'GET_SHOPPING';
+export const GET_SHOPPINGS = 'GET_SHOPPINGS';
 export const DELETE_SHOPPING = 'DELETE_SHOPPING';
+export const SHOPPING_ERROR = 'SHOPPING_ERROR';
 
 
 export const SHOW_ALERT = 'SHOW_ALERT';

@@ -18,8 +18,9 @@ const Register = (props) => {
     
     if (message) {
       showAlert(message.msg, message.category);
+      // eslint-disable-next-line
     }
-  }, [message, authenticated, props.history]);
+  }, [message, authenticated, props.history, showAlert]);
 
   // State to login
   const [user, setUser] = useState({
@@ -151,7 +152,7 @@ const Register = (props) => {
           </div>
         </form>
 
-        <Link to={"/"} className="enlace-cuenta">
+        <Link to={"/login"} className="enlace-cuenta">
           Volver a Iniciar Sesión
         </Link>
       </div>

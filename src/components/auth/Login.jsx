@@ -2,9 +2,9 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AlertContext from '../../context/alerts/alertContext';
 import AuthContext from '../../context/authentication/authContext';
+import ShoppingContext from "../../context/shopping/shoppingContext";
 
 const Login = (props) => {
-
   const alertContext = useContext(AlertContext);
   const { alert, showAlert } = alertContext;
 
@@ -19,6 +19,7 @@ const Login = (props) => {
     
     if (message) {
       showAlert(message.msg, message.category);
+      // eslint-disable-next-line
     }
   }, [message, authenticated, props.history]);
 

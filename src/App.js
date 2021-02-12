@@ -1,12 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Products from './components/products/Products';
-import ShoppingCar from './components/products/ShoppingCar';
+import ShoppingCart from './components/shoppingCart/ShoppingCart';
 
 import AlertaState from './context/alerts/alertState';
 import AuthState from './context/authentication/authState';
+import ProductState from './context/products/productState';
+import ShoppingState from './context/shopping/shoppingState';
 import tokenAuth from './config/tokenAuth';
 import PrivateRoute from './components/routes/PrivateRoute';
 
@@ -19,33 +21,23 @@ if (token) {
 
 function App() {
 
-  const [products, setProducts] = useState([{
-    name:'Camisa Queen',
-    price: 2500.00,
-    description: 'Camisa de la banda de rock Queen',
-    qtyInventary: 15
-  }, {
-    name:'Camisa Queen',
-    price: 2500.00,
-    description: 'Camisa de la banda de rock Queen',
-    qtyInventary: 15
-  }]);
-
-  const [goLogin, setGoLogin] = useState(true);
-
   return (
-    <AlertaState>
-      <AuthState>
-        <Router>
-          <Switch>
-              <Route exact path="/" component={Products} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/register" component={Register} />          
-              <PrivateRoute exact path="/shoppingcar" component={ShoppingCar} />
-          </Switch>
-        </Router>
-      </AuthState>
-    </AlertaState>
+    <ProductState>
+      <ShoppingState>
+        <AlertaState>
+          <AuthState>
+            <Router>
+              <Switch>
+                  <Route exact path="/" component={Products} />
+                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/register" component={Register} />          
+                  <PrivateRoute exact path="/shoppingcar" component={ShoppingCart} />
+              </Switch>
+            </Router>
+          </AuthState>
+        </AlertaState>
+      </ShoppingState>
+    </ProductState>
   );
 }
 

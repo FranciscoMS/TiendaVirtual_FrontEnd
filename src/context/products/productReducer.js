@@ -7,9 +7,7 @@ export default (state, action) => {
     case GET_PRODUCTS:
       return {
         ...state,
-        authenticated: true,
-        message: null,
-        loading: false
+        products: action.payload,
       }
     default:
       return state;
