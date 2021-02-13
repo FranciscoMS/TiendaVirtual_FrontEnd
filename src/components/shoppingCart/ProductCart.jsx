@@ -59,7 +59,6 @@ const ProductCart = ({ shopping }) => {
         <div id="myDropdown" className="dropdown-content">
           {qtyAvailable.map((qty) => (
             <a
-              href=""
               key={qty}
               onClick={() => handleClickQty(shopping, qty)}
               className={qty === shopping.qty ? "active" : ""}
