@@ -1,8 +1,8 @@
-import React, { useReducer } from 'react';
-import AuthContext from './authContext';
-import AuthReducer from './authReducer';
-import clientAxios from '../../config/axios';
-import tokenAuth from '../../config/tokenAuth';
+import React, { useReducer } from "react";
+import AuthContext from "./authContext";
+import AuthReducer from "./authReducer";
+import clientAxios from "../../config/axios";
+import tokenAuth from "../../config/tokenAuth";
 
 import {
   REGISTER_SUCCESS,
@@ -15,44 +15,43 @@ import {
 
 const AuthState = (props) => {
   const initialState = {
-    token: localStorage.getItem('token'),
+    token: localStorage.getItem("token"),
     authenticated: null,
     user: null,
     message: null,
-    loading: true
+    loading: true,
   };
 
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
-  const registerUser = async data => {
+  const registerUser = async (data) => {
     try {
-      const response = await clientAxios.post('/api/users', data);
+      const response = await clientAxios.post("/api/users", data);
       console.log(response.data);
       dispatch({
         type: REGISTER_SUCCESS,
-        payload: response.data
+        payload: response.data,
       });
 
       //Get authenticated user
       authUser();
     } catch (error) {
-      
       const alert = {
         msg: error.response.data.msg,
-        category: 'alerta-error'
+        category: "alerta-error",
       };
 
       dispatch({
         type: REGISTER_ERROR,
-        payload: alert
+        payload: alert,
       });
     }
-  }
+  };
 
   //Get user after register
   const authUser = async () => {
     const token = localStorage.getItem("token");
-    
+
     tokenAuth(token);
 
     try {
@@ -64,36 +63,34 @@ const AuthState = (props) => {
       });
     } catch (error) {
       dispatch({
-        type: LOGIN_ERROR
+        type: LOGIN_ERROR,
       });
     }
-  }
+  };
 
   //Login into the app
-  const login = async data => {
+  const login = async (data) => {
     try {
-      const response = await clientAxios.post('/api/auth', data);
+      const response = await clientAxios.post("/api/auth", data);
       dispatch({
         type: LOGIN_SUCCESS,
-        payload: response.data
+        payload: response.data,
       });
 
       //Get authenticated user
       authUser();
     } catch (error) {
-
       const alert = {
         msg: error.response.data.msg,
-        category: 'alerta-error'
-      }
+        category: "alerta-error",
+      };
 
       dispatch({
         type: LOGIN_ERROR,
-        payload: alert
+        payload: alert,
       });
-      
     }
-  }
+  };
 
   const logout = () => {
     //Delete token from header
@@ -102,7 +99,7 @@ const AuthState = (props) => {
     dispatch({
       type: LOGOUT,
     });
-  }
+  };
 
   return (
     <AuthContext.Provider
@@ -115,12 +112,12 @@ const AuthState = (props) => {
         registerUser,
         login,
         authUser,
-        logout
+        logout,
       }}
     >
       {props.children}
     </AuthContext.Provider>
   );
-}
- 
+};
+
 export default AuthState;

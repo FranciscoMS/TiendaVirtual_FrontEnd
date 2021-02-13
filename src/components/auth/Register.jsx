@@ -1,10 +1,9 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import AlertContext from '../../context/alerts/alertContext';
-import AuthContext from '../../context/authentication/authContext';
+import React, { useState, useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
+import AlertContext from "../../context/alerts/alertContext";
+import AuthContext from "../../context/authentication/authContext";
 
 const Register = (props) => {
-
   const alertContext = useContext(AlertContext);
   const { alert, showAlert } = alertContext;
 
@@ -13,9 +12,9 @@ const Register = (props) => {
 
   useEffect(() => {
     if (authenticated) {
-      props.history.push('/');
-    } 
-    
+      props.history.push("/");
+    }
+
     if (message) {
       showAlert(message.msg, message.category);
       // eslint-disable-next-line
@@ -24,11 +23,11 @@ const Register = (props) => {
 
   // State to login
   const [user, setUser] = useState({
-    name: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirm: ''
+    name: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirm: "",
   });
 
   // extract user info
@@ -36,33 +35,35 @@ const Register = (props) => {
 
   const onChange = (event) => {
     setUser({
-          ...user,
-          [event.target.name] : event.target.value
-      })
-  }
+      ...user,
+      [event.target.name]: event.target.value,
+    });
+  };
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault();
 
     // Validate empty inputs
-    if( name.trim() === '' ||
-        lastName.trim() === '' || 
-        email.trim() === '' || 
-        password.trim() === '' || 
-        confirm.trim() === '' ) {
-      showAlert('Todos los campos son obligatorios', 'alerta-error');
+    if (
+      name.trim() === "" ||
+      lastName.trim() === "" ||
+      email.trim() === "" ||
+      password.trim() === "" ||
+      confirm.trim() === ""
+    ) {
+      showAlert("Todos los campos son obligatorios", "alerta-error");
       return;
     }
 
     // Password must be at least 6 characters
-    if(password.length < 6) {
-      showAlert('El password debe ser mayor de 6 caracteres', 'alerta-error');
+    if (password.length < 6) {
+      showAlert("El password debe ser mayor de 6 caracteres", "alerta-error");
       return;
     }
 
     //Two passwords are equals
-    if(password !== confirm) {
-      showAlert('Los passwords son diferentes', 'alerta-error');
+    if (password !== confirm) {
+      showAlert("Los passwords son diferentes", "alerta-error");
       return;
     }
 
@@ -70,9 +71,9 @@ const Register = (props) => {
       name,
       lastName,
       email,
-      password
+      password,
     });
-  }
+  };
 
   return (
     <div className="form-usuario">
@@ -158,6 +159,6 @@ const Register = (props) => {
       </div>
     </div>
   );
-}
- 
+};
+
 export default Register;

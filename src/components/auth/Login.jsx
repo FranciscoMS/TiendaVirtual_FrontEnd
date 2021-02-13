@@ -1,8 +1,7 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import AlertContext from '../../context/alerts/alertContext';
-import AuthContext from '../../context/authentication/authContext';
-import ShoppingContext from "../../context/shopping/shoppingContext";
+import React, { useState, useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
+import AlertContext from "../../context/alerts/alertContext";
+import AuthContext from "../../context/authentication/authContext";
 
 const Login = (props) => {
   const alertContext = useContext(AlertContext);
@@ -14,43 +13,43 @@ const Login = (props) => {
   //Case password wrong or user doesn't exist
   useEffect(() => {
     if (authenticated) {
-      props.history.push('/');
+      props.history.push("/");
     }
-    
+
     if (message) {
       showAlert(message.msg, message.category);
-      // eslint-disable-next-line
     }
+    // eslint-disable-next-line
   }, [message, authenticated, props.history]);
 
   const [user, setUser] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
 
   //Extract user info
-  const {email, password} = user;
+  const { email, password } = user;
 
   const onChange = (event) => {
     setUser({
       ...user,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
-  }
+  };
 
   const onSubmit = (event) => {
     event.preventDefault();
 
     // Validation for empty inputs
-    if(email.trim() === '' || password.trim() === '') {
-      showAlert('Todos los campos son obligatorios', 'alerta-error');
+    if (email.trim() === "" || password.trim() === "") {
+      showAlert("Todos los campos son obligatorios", "alerta-error");
     }
 
     login({
       email,
-      password
+      password,
     });
-  }
+  };
 
   return (
     <div className="form-usuario">
@@ -60,12 +59,10 @@ const Login = (props) => {
       <div className="contenedor-form sombra-dark">
         <h1>Iniciar Sesión</h1>
 
-        <form
-          onSubmit={onSubmit}
-        >
+        <form onSubmit={onSubmit}>
           <div className="campo-form">
             <label htmlFor="email">Email</label>
-            <input 
+            <input
               type="email"
               id="email"
               name="email"
@@ -76,7 +73,7 @@ const Login = (props) => {
           </div>
           <div className="campo-form">
             <label htmlFor="password">Contraseña</label>
-            <input 
+            <input
               type="password"
               id="password"
               name="password"
@@ -86,15 +83,19 @@ const Login = (props) => {
             />
           </div>
           <div className="campo-form">
-            <input type="submit" className="btn btn-primario btn-block" value="Iniciar Sesión" />
+            <input
+              type="submit"
+              className="btn btn-primario btn-block"
+              value="Iniciar Sesión"
+            />
           </div>
         </form>
-        <Link  to={'/register'} className='enlace-cuenta'>
+        <Link to={"/register"} className="enlace-cuenta">
           Registrarse
         </Link>
       </div>
     </div>
   );
-}
- 
+};
+
 export default Login;

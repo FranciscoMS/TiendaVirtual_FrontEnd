@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import ShoppingCart from "../../assets/shopping-cart.svg";
 import ShoppingContext from "../../context/shopping/shoppingContext";
 import AlertContext from "../../context/alerts/alertContext";
-import AuthContext from '../../context/authentication/authContext';
+import AuthContext from "../../context/authentication/authContext";
 
 const Product = ({ product }) => {
   const shoppingContext = useContext(ShoppingContext);
@@ -18,14 +18,14 @@ const Product = ({ product }) => {
   useEffect(() => {
     authUser();
     // eslint-disable-next-line
-  }, [])
+  }, []);
 
   //Case user not logged
   useEffect(() => {
     if (message && !authenticated && !loading) {
       showAlert(message.message, message.category);
-      // eslint-disable-next-line
     }
+    // eslint-disable-next-line
   }, [message]);
 
   return (

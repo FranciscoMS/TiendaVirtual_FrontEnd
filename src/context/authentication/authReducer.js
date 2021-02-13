@@ -7,38 +7,40 @@ import {
   LOGOUT,
 } from "../../types";
 
-export default (state, action) => {
+const authReducer = (state, action) => {
   switch (action.type) {
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
-      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem("token", action.payload.token);
 
       return {
         ...state,
         authenticated: true,
         message: null,
-        loading: false
-      }
+        loading: false,
+      };
     case GET_USER:
       return {
         ...state,
         authenticated: true,
         user: action.payload,
-        loading: false
-      }
+        loading: false,
+      };
     case LOGOUT:
     case LOGIN_ERROR:
     case REGISTER_ERROR:
-      localStorage.removeItem('token');
+      localStorage.removeItem("token");
       return {
         ...state,
         token: null,
         authenticated: null,
         user: null,
         message: action.payload,
-        loading: false
-      }
+        loading: false,
+      };
     default:
       return state;
   }
-}
+};
+
+export default authReducer;

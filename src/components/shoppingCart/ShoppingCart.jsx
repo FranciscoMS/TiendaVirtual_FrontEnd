@@ -24,7 +24,7 @@ const ShoppingCart = () => {
             ))}
           </div>
         ) : (
-          <p style={{ textAlign: 'center' }}>Carrito vacio</p>
+          <p style={{ textAlign: "center" }}>Carrito vacio</p>
         )}
       </div>
     </div>

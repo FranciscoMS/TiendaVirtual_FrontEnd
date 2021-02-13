@@ -1,16 +1,18 @@
-import {SHOW_ALERT, HIDE_ALERT} from '../../types';
+import { SHOW_ALERT, HIDE_ALERT } from "../../types";
 
-export default (state, action) => {
+const alertReducer = (state, action) => {
   switch (action.type) {
     case SHOW_ALERT:
       return {
-        alert: action.payload
-      }
+        alert: action.payload,
+      };
     case HIDE_ALERT:
       return {
-        alert: null
-      }
+        alert: null,
+      };
     default:
       return state;
   }
-}
+};
+
+export default alertReducer;

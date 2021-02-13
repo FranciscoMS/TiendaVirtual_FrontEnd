@@ -13,7 +13,7 @@ import {
 
 const ShoppingState = (props) => {
   const initialState = {
-    shoppings: []
+    shoppings: [],
   };
 
   //Dispatch
@@ -52,7 +52,7 @@ const ShoppingState = (props) => {
       });
     } catch (error) {
       dispatch({
-        type: SHOPPING_ERROR
+        type: SHOPPING_ERROR,
       });
     }
   };
@@ -83,8 +83,10 @@ const ShoppingState = (props) => {
     try {
       const response = await clientAxios.put(`/api/shopping/${id}`, shopping);
 
-      console.log(response);
-      
+      dispatch({
+        type: UPDATE_SHOPPING,
+        payload: response.data,
+      });
     } catch (error) {
       const alert = {
         message: "Hubo un error",
@@ -95,7 +97,7 @@ const ShoppingState = (props) => {
         payload: alert,
       });
     }
-  }
+  };
 
   return (
     <ShoppingContext.Provider
@@ -105,7 +107,7 @@ const ShoppingState = (props) => {
         addProductToCart,
         getShoppings,
         updateShopping,
-        deleteShopping
+        deleteShopping,
       }}
     >
       {props.children}
