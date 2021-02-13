@@ -43,5 +43,8 @@ This project was build with ReactJS to the client side, using react hooks:
 
 Also, used the functional components with the Context API of Reaact, to can access at differents states without pass props between components (createContext, useContext, useReducer).
 
-NodeJs was use to develop the backend part using the MVC pattern, but on the backend only used the model and controller part, the view part of the pattern are the client develop on ReactJS. MongoDB was the database selected fot this project bacause exists a database service tha offer a MongoDB in the cloud and is MongoDB Atlas, to see more about that see (https://www.mongodb.com/cloud/atlas).
+NodeJs was use to develop the backend part using the MVC pattern, but on the backend only used the model and controller part, the view part of the pattern are the client develop on ReactJS. MongoDB was the database selected fot this project bacause exists a database service tha offer a MongoDB in the cloud and is MongoDB Atlas, to see more about that [see](https://www.mongodb.com/cloud/atlas).
+
+[BackEnd URL](https://peaceful-headland-80153.herokuapp.com)
+[FrontEnd Demo](tiendavirtualfa.netlify.app)
 
