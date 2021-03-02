@@ -1,14 +1,18 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import Header from "../layout/Header";
-import ShoppingContext from "../../context/shopping/shoppingContext";
+import { Empty, Row, Col } from 'antd';
 import ProductCart from "./ProductCart";
 
+//Action Redux
+import { useSelector, useDispatch } from "react-redux";
+import { getShoppingsAction } from "../../actions/shoppingActions";
+
 const ShoppingCart = () => {
-  const shoppingContext = useContext(ShoppingContext);
-  const { shoppings, getShoppings } = shoppingContext;
+  const { shoppings } = useSelector((state) => state.shopping);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getShoppings();
+    dispatch(getShoppingsAction());
     // eslint-disable-next-line
   }, []);
 
@@ -16,15 +20,22 @@ const ShoppingCart = () => {
     <div className="contenedor-app">
       <div className="seccion-principal">
         <Header />
-        <h2>Carrito</h2>
         {shoppings.length > 0 ? (
-          <div className="productos">
-            {shoppings.map((shopping) => (
-              <ProductCart key={shopping._id} shopping={shopping} />
-            ))}
+          <div className="site-card-wrapper productos">
+            <Row gutter={16}>
+              {shoppings.map((shopping) => (
+                <Col key={shopping._id}>
+                  <ProductCart key={shopping._id} shopping={shopping} />
+                </Col>
+              ))}
+            </Row>
           </div>
         ) : (
-          <p style={{ textAlign: "center" }}>Carrito vacio</p>
+          <Empty description={
+            <span>
+              Carrito Vacio
+            </span>
+          } />
         )}
       </div>
     </div>

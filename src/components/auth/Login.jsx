@@ -1,14 +1,13 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import AlertContext from "../../context/alerts/alertContext";
-import AuthContext from "../../context/authentication/authContext";
+import { useSelector, useDispatch } from "react-redux";
+import { loginAction } from "../../actions/authActions";
+import { message } from 'antd';
 
 const Login = (props) => {
-  const alertContext = useContext(AlertContext);
-  const { alert, showAlert } = alertContext;
-
-  const authContext = useContext(AuthContext);
-  const { message, authenticated, login } = authContext;
+  const { error, authenticated } = useSelector( state => state.auth );
+  const { alert } = useSelector( state => state.alert );
+  const dispatch = useDispatch();
 
   //Case password wrong or user doesn't exist
   useEffect(() => {
@@ -16,11 +15,15 @@ const Login = (props) => {
       props.history.push("/");
     }
 
-    if (message) {
-      showAlert(message.msg, message.category);
+    if (error) {
+      message.error({
+        content: error.msg,
+        className: error.category,
+      });
+      //dispatch(showAlertAction(message.msg, message.category));
     }
     // eslint-disable-next-line
-  }, [message, authenticated, props.history]);
+  }, [error, authenticated, props.history]);
 
   const [user, setUser] = useState({
     email: "",
@@ -42,13 +45,15 @@ const Login = (props) => {
 
     // Validation for empty inputs
     if (email.trim() === "" || password.trim() === "") {
-      showAlert("Todos los campos son obligatorios", "alerta-error");
+      //dispatch(showAlertAction("Todos los campos son obligatorios", "alerta-error"));
+      message.error("Todos los campos son obligatorios");
+      return;
     }
 
-    login({
+    dispatch(loginAction({
       email,
       password,
-    });
+    }));
   };
 
   return (

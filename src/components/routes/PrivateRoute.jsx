@@ -1,13 +1,14 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Route, Redirect } from "react-router-dom";
-import AuthContext from "../../context/authentication/authContext";
+import { useSelector, useDispatch } from "react-redux";
+import { authUserAction } from "../../actions/authActions";
 
 const PrivateRoute = ({ component: Component, ...props }) => {
-  const authContext = useContext(AuthContext);
-  const { authenticated, loading, authUser } = authContext;
+  const { loading, authenticated } = useSelector( state => state.auth );
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    authUser();
+    dispatch(authUserAction());
     // eslint-disable-next-line
   }, []);
 

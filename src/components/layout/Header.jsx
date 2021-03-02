@@ -1,22 +1,30 @@
-import React, { useContext, useEffect } from "react";
-import AuthContext from "../../context/authentication/authContext";
-import ShoppingContext from "../../context/shopping/shoppingContext";
+import React, { useEffect } from "react";
+import { Avatar, Badge } from "antd";
 import ShoppingCart from "../../assets/shopping-cart.svg";
 import LogIn from "../../assets/login.svg";
 import Logout from "../../assets/logout.svg";
 
-const Header = ({ history }) => {
-  const authContext = useContext(AuthContext);
-  const { user, authUser, logout } = authContext;
+//Action Redux
+import { useSelector, useDispatch } from "react-redux";
+import { authUserAction, logoutAction } from "../../actions/authActions";
+import { getShoppingsAction, shoppingEmptyAction } from "../../actions/shoppingActions";
 
-  const shoppingContext = useContext(ShoppingContext);
-  const { shoppings, getShoppings } = shoppingContext;
+const Header = ({ history }) => {
+  // Get state
+  const user = useSelector((state) => state.auth.user);
+  const { shoppings } = useSelector((state) => state.shopping);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    authUser();
-    getShoppings();
+    dispatch(authUserAction());
+    dispatch(getShoppingsAction());
     // eslint-disable-next-line
   }, []);
+
+  const logout = () => {
+    dispatch(logoutAction());
+    dispatch(shoppingEmptyAction());
+  };
 
   const toLogin = () => {
     history.push("/login");
@@ -29,20 +37,21 @@ const Header = ({ history }) => {
   return (
     <header className="app-header">
       <nav className="nav-principal">
-        {user ? (
-          <div className="nav-left">
-            <p className="nombre-usuario">
-              Hola <span>{`${user.name} ${user.lastName}`}</span>
-            </p>
-          </div>
-        ) : null}
+        <div className="nav-left">
+          <p className="nombre-usuario">Logo</p>
+        </div>
         <div className="nav-right">
-          <div className="icon" onClick={() => toShopping()}>
+          {user ? (
+            <Avatar className="icon user">{`${user.name.split("").slice(0, 1)}${user.lastName.split("").slice(0, 1)}`}</Avatar>
+          ) : null}
+          <Badge
+            size="small"
+            className="icon"
+            count={user ? shoppings.length : 0}
+            onClick={() => toShopping()}
+          >
             <img src={ShoppingCart} alt="none" width="100%" height="100%" />
-            {shoppings.length > 0 && user ? (
-              <div className="txt">{shoppings.length}</div>
-            ) : null}
-          </div>
+          </Badge>
           {user ? (
             <div className="icon" onClick={() => logout()}>
               <img

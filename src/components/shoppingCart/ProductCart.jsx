@@ -1,17 +1,18 @@
-import React, { useState, useContext, useEffect } from "react";
-import ShoppingContext from "../../context/shopping/shoppingContext";
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Card } from 'antd';
+import { deleteShoppingAction, updateShoppingAction } from "../../actions/shoppingActions";
 
 const ProductCart = ({ shopping }) => {
   const { product } = shopping;
-  const shoppingContext = useContext(ShoppingContext);
-  const { deleteShopping, updateShopping } = shoppingContext;
-
   const [show, setShow] = useState(false);
 
   //Add one more to the qty available
   let qty = product.qtyInventory ? product.qtyInventory + 1 : 0;
 
   const qtyAvailable = Array.from(Array(qty).keys());
+
+  const dispatch = useDispatch();
 
   //Hide the dropdown
   const handleClick = (event) => {
@@ -36,18 +37,25 @@ const ProductCart = ({ shopping }) => {
   //Ypdate qty of shopping if qty is 0 delete that shopping
   const handleClickQty = (shopping, qty) => {
     if (qty === 0) {
-      deleteShopping(shopping._id);
+      dispatch(deleteShoppingAction(shopping._id));
       return;
     }
 
     shopping.qty = qty;
 
-    updateShopping(shopping._id, shopping);
+    dispatch(updateShoppingAction(shopping._id, shopping));
   };
 
+  const deleteShopping = (idShopping) => {
+    dispatch(deleteShoppingAction(idShopping));
+  }
+
   return (
-    <div className="producto">
-      <label>{product.name}</label>
+    <Card 
+      className="producto"
+      title={product.name}
+      bordered={false}
+    >
       <p>{product.description}</p>
       <label>Precio: &#8353;{product.price}&nbsp;</label>
       <button className="dropbtn" onClick={() => showDropdown()}>
@@ -75,7 +83,7 @@ const ProductCart = ({ shopping }) => {
       >
         Eliminar
       </button>
-    </div>
+    </Card>
   );
 };
 

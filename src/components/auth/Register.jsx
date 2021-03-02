@@ -1,25 +1,28 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import AlertContext from "../../context/alerts/alertContext";
-import AuthContext from "../../context/authentication/authContext";
+import { useSelector, useDispatch } from "react-redux";
+import { registerUserAction } from "../../actions/authActions";
+import { message } from 'antd';
 
 const Register = (props) => {
-  const alertContext = useContext(AlertContext);
-  const { alert, showAlert } = alertContext;
-
-  const authContext = useContext(AuthContext);
-  const { message, authenticated, registerUser } = authContext;
+  const { error, authenticated } = useSelector( state => state.auth );
+  const { alert } = useSelector( state => state.alert );
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (authenticated) {
       props.history.push("/");
     }
 
-    if (message) {
-      showAlert(message.msg, message.category);
+    if (error) {
+      message.error({
+        content: error.msg,
+        className: error.category
+      });
+      //dispatch(showAlertAction(message.msg, message.category));
       // eslint-disable-next-line
     }
-  }, [message, authenticated, props.history, showAlert]);
+  }, [error, authenticated, props.history, dispatch]);
 
   // State to login
   const [user, setUser] = useState({
@@ -51,28 +54,40 @@ const Register = (props) => {
       password.trim() === "" ||
       confirm.trim() === ""
     ) {
-      showAlert("Todos los campos son obligatorios", "alerta-error");
+      //dispatch(showAlertAction("Todos los campos son obligatorios", "alerta-error"));
+      message.error({ 
+        content: "Todos los campos son obligatorios", 
+        className: "alerta-error"
+      });
       return;
     }
 
     // Password must be at least 6 characters
     if (password.length < 6) {
-      showAlert("El password debe ser mayor de 6 caracteres", "alerta-error");
+      //dispatch(showAlertAction("El password debe ser mayor de 6 caracteres", "alerta-error"));
+      message.error({ 
+        content: "El password debe ser mayor de 6 caracteres", 
+        className: "alerta-error"
+      });
       return;
     }
 
     //Two passwords are equals
     if (password !== confirm) {
-      showAlert("Los passwords son diferentes", "alerta-error");
+      //dispatch(showAlertAction("Los passwords son diferentes", "alerta-error"));
+      message.error({ 
+        content: "Los passwords son diferentes", 
+        className: "alerta-error"
+      });
       return;
     }
 
-    registerUser({
+    dispatch(registerUserAction({
       name,
       lastName,
       email,
       password,
-    });
+    }));
   };
 
   return (

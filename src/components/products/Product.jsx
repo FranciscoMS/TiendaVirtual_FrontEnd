@@ -1,43 +1,52 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import ShoppingCart from "../../assets/shopping-cart.svg";
-import ShoppingContext from "../../context/shopping/shoppingContext";
-import AlertContext from "../../context/alerts/alertContext";
-import AuthContext from "../../context/authentication/authContext";
+import { useSelector, useDispatch } from "react-redux";
+import { authUserAction } from "../../actions/authActions";
+import { addProductToCartAction } from '../../actions/shoppingActions';
+import { message, Card } from 'antd';
 
 const Product = ({ product }) => {
-  const shoppingContext = useContext(ShoppingContext);
-  const { message, addProductToCart } = shoppingContext;
-
-  const alertContext = useContext(AlertContext);
-  const { showAlert } = alertContext;
-
-  const authContext = useContext(AuthContext);
-  const { authenticated, loading, authUser } = authContext;
+  const { authenticated } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   //Get user info
   useEffect(() => {
-    authUser();
+    dispatch(authUserAction());
     // eslint-disable-next-line
   }, []);
 
-  //Case user not logged
-  useEffect(() => {
-    if (message && !authenticated && !loading) {
-      showAlert(message.message, message.category);
+  const addProduct = async (product) => {
+    if(authenticated) {
+      message.loading({ 
+        content: 'Loading...', 
+        key: 'updatable',
+        className: 'alerta-ok'
+      });
     }
-    // eslint-disable-next-line
-  }, [message]);
+
+    await dispatch(addProductToCartAction(product));
+    
+    if(authenticated) {
+      message.success({
+        content: 'Producto Agregado',
+        className: 'alerta-ok',
+        key: 'updatable'
+      });
+    }
+  };
 
   return (
-    <div className="producto">
-      <label>{product.name}</label>
+    <Card
+      className="producto" 
+      title={product.name} 
+      bordered={false}>
       <p>{product.description}</p>
       <label>Precio: &#8353;{product.price}&nbsp;</label>
       <button
         type="button"
         className="btn btn-agregar btn-block"
         onClick={() =>
-          addProductToCart({
+          addProduct({
             product: product._id,
             qty: 1,
             color: "Default",
@@ -47,7 +56,7 @@ const Product = ({ product }) => {
       >
         Agregar <img src={ShoppingCart} alt="none" width="10%" height="10%" />
       </button>
-    </div>
+    </Card>
   );
 };
 

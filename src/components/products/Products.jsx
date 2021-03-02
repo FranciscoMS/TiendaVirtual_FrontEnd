@@ -1,33 +1,47 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import Header from "../layout/Header";
-import ProductContext from "../../context/products/productContext";
-import AlertContext from "../../context/alerts/alertContext";
 import Product from "./Product";
+import { Col, Row, message } from "antd";
+import { useSelector, useDispatch } from "react-redux";
+import { getAllProductsAction } from "../../actions/productsActions";
 
 const Products = ({ history }) => {
-  const productContext = useContext(ProductContext);
-  const { products, getAllProducts } = productContext;
-
-  const alertContext = useContext(AlertContext);
-  const { alert } = alertContext;
+  // Get state
+  const products = useSelector((state) => state.products.products);
+  const { authenticated, loading } = useSelector((state) => state.auth);
+  const { error } = useSelector((state) => state.shopping);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getAllProducts();
+    dispatch(getAllProductsAction());
     // eslint-disable-next-line
   }, []);
+
+  //Case user not logged
+  useEffect(() => {
+    if (error && !authenticated && !loading) {
+      message.error({
+        content: error.message,
+        className: error.category,
+      });
+      //dispatch(showAlertAction(message.message, message.category));
+    }
+    // eslint-disable-next-line
+  }, [error]);
 
   return (
     <div className="contenedor-app">
       <div className="seccion-principal">
         <Header history={history} />
-        {alert ? (
-          <div className={`alerta ${alert.category}`}>{alert.message}</div>
-        ) : null}
-        <div className="productos">
+        <div className="site-card-wrapper productos">
           <h2>Productos</h2>
-          {products.map((product) => (
-            <Product key={product._id} product={product} />
-          ))}
+          <Row gutter={16}>
+            {products.map((product) => (
+              <Col key={product._id}>
+                <Product key={product._id} product={product} />
+              </Col>
+            ))}
+          </Row>
         </div>
       </div>
     </div>
